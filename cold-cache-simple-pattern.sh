@@ -14,3 +14,5 @@ hyperfine \
     --setup "$RESET_CACHES" \
     "$COMMAND_FIND" \
     "$COMMAND_FD"
+
+check_for_differences "false" "$COMMAND_FIND" "$COMMAND_FD"
