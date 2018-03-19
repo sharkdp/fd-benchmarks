@@ -3,7 +3,7 @@
 source "prelude.sh"
 
 COMMAND_FIND="find '$SEARCH_ROOT' -type l"
-COMMAND_FD="fd -HI --type l '' '$SEARCH_ROOT'"
+COMMAND_FD="fd -HI '' '$SEARCH_ROOT' --type l"
 
 hyperfine --warmup "$WARMUP_COUNT" \
     "$COMMAND_FIND" \
