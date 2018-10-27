@@ -9,6 +9,7 @@ COMMAND_FD="fd -HI --extension '$EXT' '' '$SEARCH_ROOT'"
 
 hyperfine --warmup "$WARMUP_COUNT" \
     "$COMMAND_FIND" \
-    "$COMMAND_FD"
+    "$COMMAND_FD" \
+    --export-markdown results-warm-cache-file-extension.md
 
 check_for_differences "false" "$COMMAND_FIND" "$COMMAND_FD"

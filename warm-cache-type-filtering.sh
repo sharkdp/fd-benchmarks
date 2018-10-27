@@ -7,6 +7,7 @@ COMMAND_FD="fd -HI '' '$SEARCH_ROOT' --type l"
 
 hyperfine --warmup "$WARMUP_COUNT" \
     "$COMMAND_FIND" \
-    "$COMMAND_FD"
+    "$COMMAND_FD" \
+    --export-markdown results-warm-cache-type-filtering.md
 
 check_for_differences "false" "$COMMAND_FIND" "$COMMAND_FD"
