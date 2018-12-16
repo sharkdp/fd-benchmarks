@@ -14,6 +14,6 @@ hyperfine \
     --prepare "$RESET_CACHES" \
     "$COMMAND_FIND" \
     "$COMMAND_FD" \
-    --export-markdown cold-cache-simple-pattern.md
+    --export-markdown results-cold-cache-simple-pattern.md
 
 check_for_differences "false" "$COMMAND_FIND" "$COMMAND_FD"
