@@ -28,6 +28,15 @@ rm -f "$RESULT_DIR"/*.md
 
 echo "## \`fd\` regression benchmark" >> "$REPORT"
 
+heading "Interactive output"
+hyperfine --warmup "$WARMUP_COUNT" \
+    "$FD1 '' '$SEARCH_ROOT'" \
+    "$FD2 '' '$SEARCH_ROOT'" \
+    --show-output \
+    --export-markdown "$RESULT_DIR/00-interactive-output.md" \
+    --export-json "$RESULT_DIR/00-interactive-output.json"
+cat "$RESULT_DIR/00-interactive-output.md" >> "$REPORT"
+
 heading "No pattern"
 hyperfine --warmup "$WARMUP_COUNT" \
     "$FD1 --hidden --no-ignore '' '$SEARCH_ROOT'" \
@@ -68,6 +77,22 @@ hyperfine --warmup "$WARMUP_COUNT" \
     --export-json "$RESULT_DIR/05-file-type.json"
 cat "$RESULT_DIR/05-file-type.md" >> "$REPORT"
 
+heading "Command execution"
+hyperfine --warmup "$WARMUP_COUNT" \
+    "$FD1 'ab' '$SEARCH_ROOT' --exec echo" \
+    "$FD2 'ab' '$SEARCH_ROOT' --exec echo" \
+    --export-markdown "$RESULT_DIR/06-command-execution.md" \
+    --export-json "$RESULT_DIR/06-command-execution.json"
+cat "$RESULT_DIR/06-command-execution.md" >> "$REPORT"
+
+heading "Command execution (large output)"
+hyperfine --warmup "$WARMUP_COUNT" \
+    "$FD1 -tf 'ab' '$SEARCH_ROOT' --exec cat" \
+    "$FD2 -tf 'ab' '$SEARCH_ROOT' --exec cat" \
+    --export-markdown "$RESULT_DIR/07-command-execution.md" \
+    --export-json "$RESULT_DIR/07-command-execution.json"
+cat "$RESULT_DIR/07-command-execution.md" >> "$REPORT"
+
 ask_for_sudo
 
 heading "Cold cache"
@@ -76,9 +101,9 @@ hyperfine \
     --prepare "$RESET_CACHES" \
     "$FD1 -HI '.*[0-9]\.jpg$' '$SEARCH_ROOT'" \
     "$FD2 -HI '.*[0-9]\.jpg$' '$SEARCH_ROOT'" \
-    --export-markdown "$RESULT_DIR/06-simple-pattern-cold-cache.md" \
-    --export-json "$RESULT_DIR/06-simple-pattern-cold-cache.json"
-cat "$RESULT_DIR/06-simple-pattern-cold-cache.md" >> "$REPORT"
+    --export-markdown "$RESULT_DIR/07-simple-pattern-cold-cache.md" \
+    --export-json "$RESULT_DIR/07-simple-pattern-cold-cache.json"
+cat "$RESULT_DIR/07-simple-pattern-cold-cache.md" >> "$REPORT"
 
 echo
 echo "Wrote markdown report to '$RESULT_DIR/report.md'"
