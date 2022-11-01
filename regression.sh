@@ -28,10 +28,19 @@ rm -f "$RESULT_DIR"/*.md
 
 echo "## \`fd\` regression benchmark" >> "$REPORT"
 
-heading "Interactive output"
+heading "Interactive output (colored)"
 hyperfine --warmup "$WARMUP_COUNT" \
-    "$FD1 '' '$SEARCH_ROOT'" \
-    "$FD2 '' '$SEARCH_ROOT'" \
+    "$FD1 '' '$SEARCH_ROOT' --color=always" \
+    "$FD2 '' '$SEARCH_ROOT' --color=always" \
+    --show-output \
+    --export-markdown "$RESULT_DIR/00-interactive-output.md" \
+    --export-json "$RESULT_DIR/00-interactive-output.json"
+cat "$RESULT_DIR/00-interactive-output.md" >> "$REPORT"
+
+heading "Interactive output (uncolored)"
+hyperfine --warmup "$WARMUP_COUNT" \
+    "$FD1 '' '$SEARCH_ROOT' --color=never" \
+    "$FD2 '' '$SEARCH_ROOT' --color=never" \
     --show-output \
     --export-markdown "$RESULT_DIR/00-interactive-output.md" \
     --export-json "$RESULT_DIR/00-interactive-output.json"
@@ -41,6 +50,22 @@ heading "No pattern"
 hyperfine --warmup "$WARMUP_COUNT" \
     "$FD1 --hidden --no-ignore '' '$SEARCH_ROOT'" \
     "$FD2 --hidden --no-ignore '' '$SEARCH_ROOT'" \
+    --export-markdown "$RESULT_DIR/01-no-pattern.md" \
+    --export-json "$RESULT_DIR/01-no-pattern.json"
+cat "$RESULT_DIR/01-no-pattern.md" >> "$REPORT"
+
+heading "No pattern (colored)"
+hyperfine --warmup "$WARMUP_COUNT" \
+    "$FD1 --hidden --no-ignore '' '$SEARCH_ROOT' --color=always" \
+    "$FD2 --hidden --no-ignore '' '$SEARCH_ROOT' --color=always" \
+    --export-markdown "$RESULT_DIR/01-no-pattern.md" \
+    --export-json "$RESULT_DIR/01-no-pattern.json"
+cat "$RESULT_DIR/01-no-pattern.md" >> "$REPORT"
+
+heading "No pattern (single thread)"
+hyperfine --warmup "$WARMUP_COUNT" \
+    "$FD1 --hidden --no-ignore '' '$SEARCH_ROOT' --threads=1" \
+    "$FD2 --hidden --no-ignore '' '$SEARCH_ROOT' --threads=1" \
     --export-markdown "$RESULT_DIR/01-no-pattern.md" \
     --export-json "$RESULT_DIR/01-no-pattern.json"
 cat "$RESULT_DIR/01-no-pattern.md" >> "$REPORT"
@@ -92,6 +117,14 @@ hyperfine --warmup "$WARMUP_COUNT" \
     --export-markdown "$RESULT_DIR/07-command-execution.md" \
     --export-json "$RESULT_DIR/07-command-execution.json"
 cat "$RESULT_DIR/07-command-execution.md" >> "$REPORT"
+
+heading "Command execution (batched)"
+hyperfine --warmup "$WARMUP_COUNT" \
+    "$FD1 'ab' '$SEARCH_ROOT' --exec-batch echo" \
+    "$FD2 'ab' '$SEARCH_ROOT' --exec-batch echo" \
+    --export-markdown "$RESULT_DIR/06-command-execution.md" \
+    --export-json "$RESULT_DIR/06-command-execution.json"
+cat "$RESULT_DIR/06-command-execution.md" >> "$REPORT"
 
 ask_for_sudo
 
